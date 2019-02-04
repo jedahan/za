@@ -21,8 +21,9 @@ Run the tests
 
 The commandline [cli.js][] outputs debugging information to stderr and the raw output to stdout, so you can use it in other scripts, for example:
 
-![commandline example](./cli.svg)
-
+<p align="center">
+    <img src="./cli.svg">
+</p>
 
 [za.js](./za.js) houses houses the main delivery algorithm
 
