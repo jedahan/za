@@ -19,7 +19,7 @@ Run the tests
 
 ## design
 
-The commandline [cli.js][] outputs debugging information to stderr and the raw output to stdout, so you can use it in other scripts, for example:
+The commandline [cli.js](./cli.js) outputs debugging information to stderr and the raw output to stdout, so you can use it in other scripts, for example:
 
 <p align="center">
     <img src="https://jedahan.github.io/za/cli.svg">
