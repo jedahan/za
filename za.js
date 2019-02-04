@@ -1,18 +1,18 @@
-const deliver = (directions, deliveryPeople=1) => {
-  let pos = [0, 0]
-  const houses = new Set([JSON.stringify(pos)])
+const deliver = (directions, deliveryPeople) => {
+  const houses = new Set([JSON.stringify([0, 0])])
+  const locations = Array.from({length: deliveryPeople}, _ => ([0, 0]))
 
-  directions.split('').forEach(direction => {
-
+  directions.split('').forEach((direction, idx) => {
+    const index = idx % deliveryPeople
     switch(direction) {
-      case '^': pos[1]++; break;
-      case 'v': pos[1]--; break;
-      case '>': pos[0]++; break;
-      case '<': pos[0]--; break;
+      case '^': locations[index][1]++; break;
+      case 'v': locations[index][1]--; break;
+      case '>': locations[index][0]++; break;
+      case '<': locations[index][0]--; break;
     }
-    houses.add(JSON.stringify(pos))
+    houses.add(JSON.stringify(locations[index]))
   })
-  return { houses: houses.size }
+  return { delivered: houses.size, houses, locations, deliveryPeople }
 }
 
 module.exports = { deliver }
