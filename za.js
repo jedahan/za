@@ -1,6 +1,6 @@
 const deliver = (directions, deliveryPeople) => {
   const houses = new Set([JSON.stringify([0, 0])])
-  const locations = Array.from({length: deliveryPeople}, _ => ([0, 0]))
+  const locations = Array.from(Array(deliveryPeople), () => [0, 0])
 
   directions.split('').forEach((direction, idx) => {
     const index = idx % deliveryPeople
