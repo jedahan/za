@@ -22,7 +22,7 @@ Run the tests
 The commandline [cli.js][] outputs debugging information to stderr and the raw output to stdout, so you can use it in other scripts, for example:
 
 <p align="center">
-    <img src="./cli.svg">
+    <img src="https://jedahan.github.io/za/cli.svg">
 </p>
 
 [za.js](./za.js) houses houses the main delivery algorithm
