@@ -1,4 +1,4 @@
-const deliver = (directions, deliveryPeople) => {
+const deliver = (directions, deliveryPeople=1) => {
   const houses = new Set([JSON.stringify([0, 0])])
   const locations = Array.from(Array(deliveryPeople), () => [0, 0])
 
