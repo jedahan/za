@@ -2,6 +2,8 @@
 
 How many houses get some tasty za?
 
+Note: for a slightly more minimal version, check out the [zero-dependencies branch].
+
 # requirements
 
 Tested on node v11.7.0. Make sure to install dependencies
@@ -53,3 +55,5 @@ The commandline [src/cli.js](./src/cli.js) accepts stdin for directions, uses st
 # answers
 
 With the given input.txt, I got 2565 homes with 1 delivery person and 2639 homes with 2 delivery people. This can be checked with `npm run homework`
+
+[zero-dependencies branch]: https://github.com/jedahan/za
