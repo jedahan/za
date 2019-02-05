@@ -2,7 +2,7 @@
 
 How many houses get some tasty za?
 
-Requires nodejs and npm
+Zero dependencies, but requires nodejs and recommends npm
 
 Dispatch some directions
 
