@@ -5,7 +5,8 @@
   "main": "src/cli.js",
   "scripts": {
     "za": "node src/cli.js",
-    "test": "node tests/delivery.js"
+    "test": "node tests/delivery.js",
+    "homework": "npm run za -- < data/input.txt 2>/dev/null; npm run za -- --people 2 < data/input.txt 2>/dev/null"
   },
   "repository": {
     "type": "git",

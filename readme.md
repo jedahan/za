@@ -56,3 +56,7 @@ The commandline [src/cli.js](./src/cli.js) accepts stdin for directions, uses st
 [src/deliver.js](./src/deliver.js) the main delivery algorithm
 
 [tests/delivery.js](./tests/delivery.js) runs tests found in the challenge readme
+
+# answers
+
+With the given input.txt, I got 2565 homes with 1 delivery person and 2639 homes with 2 delivery people. This can be checked with `npm run homework`
