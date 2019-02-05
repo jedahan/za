@@ -2,26 +2,19 @@
 
 How many houses get some tasty za?
 
-Zero dependencies, but requires nodejs and recommends npm
+# requirements
 
-Dispatch some directions
+Tested on node v11.7.0. Make sure to install dependencies
 
-    node src/cli --directions '^v^v'
-    # 2
+    npm install
 
-With two delivery people, using npm
-
-    npm run za -- --people 2 '^v^v'
-    # 3
-
-Run the tests
+Then run the tests
 
     npm test
 
-
 ## ux
 
-    npm run za -- --help
+    $ npm run za -- --help
 
     Help
 
@@ -44,10 +37,6 @@ Run the tests
       $ npm run za -- --people 2 <data/input.txt
 
 ## design
-
-I decided to see how far I can get with no libraries, just plain node.js (v11.7.0).
-This is partly a response to the whole event-stream kerfluffle, but mostly seeing how far regular js ergonomics have gotten.
-The three places I would want to use libraries for, before this would be ready for production are in in argument parsing, reading stdin, and running tests.
 
 We slightly abuse `JSON.stringify` to do 'value equality' on locations. See issue #1 for details.
 
