@@ -2,7 +2,8 @@
 
 How many houses get some tasty za?
 
-Zero dependencies, but requires nodejs and recommends npm
+Zero dependencies, but requires nodejs and recommends npm.
+For a slightly more production-ready version, check out the [production branch][]
 
 Dispatch some directions
 
@@ -64,3 +65,5 @@ The commandline [src/cli.js](./src/cli.js) accepts stdin for directions, uses st
 # answers
 
 With the given input.txt, I got 2565 homes with 1 delivery person and 2639 homes with 2 delivery people. This can be checked with `npm run homework`
+
+[production branch]: https://github.com/jedehan/za/tree/production
