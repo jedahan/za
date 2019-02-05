@@ -45,6 +45,10 @@ Run the tests
 
 ## design
 
+I decided to see how far I can get with no libraries, just plain node.js (v11.7.0).
+This is partly a response to the whole event-stream kerfluffle, but mostly seeing how far regular js ergonomics have gotten.
+The three places I would want to use libraries for, before this would be ready for production are in in argument parsing, reading stdin, and running tests.
+
 We slightly abuse `JSON.stringify` to do 'value equality' on locations. See issue #1 for details.
 
 The commandline [src/cli.js](./src/cli.js) accepts stdin for directions, uses stderr for debugging information, and stdout for piping the answer to other scripts. Make sure to use `--silent` if you are using `npm run`, for example `npm run --silent za -- '^v^v'| toilet -f mono12`
