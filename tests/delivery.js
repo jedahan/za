@@ -15,7 +15,7 @@ Object.keys(tests).forEach(people => {
       console.log(`✓ ${delivered} houses with ${people} pople following '${directions}'`)
     } catch (e) {
       console.log(`✘ ${delivered} houses (expected ${expectedHouses}) with ${people} people following '${directions}'`)
-      console.dir({houses})
+      console.dir({ houses })
     }
   })
 })

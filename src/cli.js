@@ -10,13 +10,13 @@ const debug = data => {
 const readStdin = () => {
   debug(`Please enter some directions (<^v>)`)
   return new Promise((resolve, reject) => {
-    stdin.setEncoding('utf8');
+    stdin.setEncoding('utf8')
 
     let input = ''
     const accept = () => resolve(input.trim())
 
     stdin.on('readable', () => {
-      let chunk;
+      let chunk
       while ((chunk = process.stdin.read()) !== null) {
         input += chunk
         if (input.includes('\n')) return accept()
@@ -28,7 +28,7 @@ const readStdin = () => {
 
 const validateArguments = async () => {
   if (argv.length % 2) {
-    const help= `  Help
+    const help = `  Help
 
   za tracks the number of homes who get tasty pizza
 
@@ -63,18 +63,17 @@ const validateArguments = async () => {
   let directions = argv.indexOf(`--directions`) + 1 ? argv[argv.indexOf(`--directions`) + 1] : null
   if (directions === null) directions = await readStdin()
 
-  debug({directions, people})
+  debug({ directions, people })
   return { directions, people }
 }
 
-
-const getHouses = async ({directions, people}) => {
+const getHouses = async ({ directions, people }) => {
   return deliver(directions, people)
 }
 
 // debug to stderr, plain to stdout
-const output = async ({delivered}) => {
-  debug({delivered})
+const output = async ({ delivered }) => {
+  debug({ delivered })
   console.log(delivered)
 }
 
