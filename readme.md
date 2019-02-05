@@ -45,6 +45,8 @@ Run the tests
 
 ## design
 
+We slightly abuse `JSON.stringify` to do 'value equality' on locations. See issue #1 for details.
+
 The commandline [src/cli.js](./src/cli.js) accepts stdin for directions, uses stderr for debugging information, and stdout for piping the answer to other scripts. Make sure to use `--silent` if you are using `npm run`, for example `npm run --silent za -- '^v^v'| toilet -f mono12`
 
 <p align="center">
@@ -54,11 +56,3 @@ The commandline [src/cli.js](./src/cli.js) accepts stdin for directions, uses st
 [src/deliver.js](./src/deliver.js) the main delivery algorithm
 
 [tests/delivery.js](./tests/delivery.js) runs tests found in the challenge readme
-
-## todo
-
-* run tests in parallel
-* investigate removing stringification of positions
-* rename cli => za and za => lib
-* move todos to issues
-* package.json for nicer scripts (`npm run` `npm test`)
