@@ -1,13 +1,21 @@
 const { deliver } = require('./deliver.js')
 
-const { argv, exit, stdin, stderr } = require('process')
+const { exit, stdin, stderr } = require('process')
+const arg = require('@zeit/arg')
 
 const debug = data => {
   stderr.write(`🍕 `)
   console.error(data)
 }
 
-const readStdin = () => {
+const error = (message, code=-1) => {
+  stderr.write(`✘ `)
+  console.error(message)
+  exit(code)
+}
+
+
+const readStdin = async () => {
   debug(`Please enter some directions (<^v>)`)
   return new Promise((resolve, reject) => {
     stdin.setEncoding('utf8')
@@ -27,7 +35,16 @@ const readStdin = () => {
 }
 
 const validateArguments = async () => {
-  if (argv.length % 2) {
+  const args = arg({
+    '--help': Boolean,
+    '--people': Number,
+    '--directions': String,
+    '-h': '--help',
+    '-p': '--people',
+    '-d': '--directions',
+  })
+
+  if (args[`--help`]) {
     const help = `  Help
 
   za tracks the number of homes who get tasty pizza
@@ -52,19 +69,16 @@ const validateArguments = async () => {
     exit(0)
   }
 
-  // Try and get people from argv, default to 1
-  let people = argv.indexOf(`--people`) + 1 ? Number(argv[argv.indexOf(`--people`) + 1]) : 1
-  if (isNaN(people)) people = 1
-  if (people !== Math.floor(people)) {
-    console.error(`people must be an integer, found ${people}`)
-    exit(-1)
+  const people = args[`--people`]
+  if (people && people !== Math.floor(people)) {
+    error(`people must be an integer, found ${people}`)
   }
+  if (!people) args.people = 1
 
-  let directions = argv.indexOf(`--directions`) + 1 ? argv[argv.indexOf(`--directions`) + 1] : null
-  if (directions === null) directions = await readStdin()
+  const directions = args[`--directions`] ? args[`--directions`] : await readStdin()
 
-  debug({ directions, people })
-  return { directions, people }
+  debug({ people, directions })
+  return { people, directions }
 }
 
 const getHouses = async ({ directions, people }) => {

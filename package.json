@@ -5,7 +5,7 @@
   "main": "src/cli.js",
   "scripts": {
     "za": "node src/cli.js",
-    "test": "node tests/delivery.js",
+    "test": "spoon -c 7 tests/*",
     "homework": "npm run za -- < data/input.txt 2>/dev/null; npm run za -- --people 2 < data/input.txt 2>/dev/null"
   },
   "repository": {
@@ -21,5 +21,12 @@
   "bugs": {
     "url": "https://github.com/jedahan/za/issues"
   },
-  "homepage": "https://github.com/jedahan/za#readme"
+  "homepage": "https://github.com/jedahan/za#readme",
+  "dependencies": {
+    "@zeit/arg": "^1.0.0"
+  },
+  "devDependencies": {
+    "spooning": "^1.1.0",
+    "spooning-cli": "^1.0.0"
+  }
 }
