@@ -1,0 +1,24 @@
+{
+  "name": "za",
+  "version": "0.1.0",
+  "description": "deliver delicious cheesy goodness",
+  "main": "src/cli.js",
+  "scripts": {
+    "za": "node src/cli.js",
+    "test": "node tests/delivery.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jedahan/za.git"
+  },
+  "keywords": [
+    "homework",
+    "cowabunga"
+  ],
+  "author": "Jonathan Dahan <hi@jonathan.is>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jedahan/za/issues"
+  },
+  "homepage": "https://github.com/jedahan/za#readme"
+}
