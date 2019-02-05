@@ -66,4 +66,4 @@ The commandline [src/cli.js](./src/cli.js) accepts stdin for directions, uses st
 
 With the given input.txt, I got 2565 homes with 1 delivery person and 2639 homes with 2 delivery people. This can be checked with `npm run homework`
 
-[production branch]: https://github.com/jedehan/za/tree/production
+[production branch]: https://github.com/jedahan/za/tree/production
