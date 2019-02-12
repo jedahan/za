@@ -1,4 +1,4 @@
-const { deliver } = require('./deliver.js')
+const { LocationsVisitedReducer, TakeTurnsDispatcher, DeliveryPerson } = require('./deliver.js')
 
 const { exit, stdin, stderr } = require('process')
 const arg = require('@zeit/arg')
@@ -8,7 +8,7 @@ const debug = data => {
   console.error(data)
 }
 
-const error = (message, code=-1) => {
+const error = (message, code = -1) => {
   stderr.write(`✘ `)
   console.error(message)
   exit(code)
@@ -17,7 +17,7 @@ const error = (message, code=-1) => {
 
 const readStdin = async () => {
   debug(`Please enter some directions (<^v>)`)
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _) => {
     stdin.setEncoding('utf8')
 
     let input = ''
@@ -69,11 +69,11 @@ const validateArguments = async () => {
     exit(0)
   }
 
-  const people = args[`--people`]
+  let people = args[`--people`]
   if (people && people !== Math.floor(people)) {
     error(`people must be an integer, found ${people}`)
   }
-  if (!people) args.people = 1
+  if (!people) people = 1
 
   const directions = args[`--directions`] ? args[`--directions`] : await readStdin()
 
@@ -82,13 +82,17 @@ const validateArguments = async () => {
 }
 
 const getHouses = async ({ directions, people }) => {
-  return deliver(directions, people)
+  const deliveryPeople = Array.from(Array(people), () => new DeliveryPerson())
+  const dispatcher = new TakeTurnsDispatcher(deliveryPeople)
+  dispatcher.dispatch(directions)
+  const locationsVisitedReducer = new LocationsVisitedReducer(deliveryPeople)
+  return locationsVisitedReducer.summarize()
 }
 
 // debug to stderr, plain to stdout
-const output = async ({ delivered }) => {
-  debug({ delivered })
-  console.log(delivered)
+const output = async ({ locationsVisited }) => {
+  debug({ locationsVisited })
+  console.log(locationsVisited)
 }
 
 validateArguments()
