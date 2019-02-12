@@ -85,15 +85,4 @@ class TakeTurnsDispatcher {
   }
 }
 
-// The deliver function is now deprecated, but lets keep it around for one push in case we missed a calling location that depends on it
-const deliver = (people, directions) => {
-  console.warn(`'deliver' is deprecated! Please use the DeliveryPerson, *Reducer, and *Dispatcher classes directly`)
-  const deliveryPeople = Array.from(Array(people), () => new DeliveryPerson())
-  const dispatcher = new TakeTurnsDispatcher(deliveryPeople)
-  dispatcher.dispatch(directions)
-  const locationsVisitedReducer = new LocationsVisitedReducer(deliveryPeople)
-  const { locationsVisited } = locationsVisitedReducer.summarize()
-  return { housesWithPizza: locationsVisited }
-}
-
-module.exports = { LocationsVisitedReducer, TakeTurnsDispatcher, DeliveryPerson, deliver }
+module.exports = { LocationsVisitedReducer, TakeTurnsDispatcher, DeliveryPerson }
