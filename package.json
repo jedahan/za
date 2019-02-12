@@ -5,7 +5,7 @@
   "main": "src/cli.js",
   "scripts": {
     "za": "node src/cli.js",
-    "test": "spoon -c 7 tests/*",
+    "test": "spoon -c 10 tests/*",
     "homework": "npm run za -- < data/input.txt 2>/dev/null; npm run za -- --people 2 < data/input.txt 2>/dev/null"
   },
   "repository": {

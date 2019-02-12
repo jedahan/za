@@ -1,28 +1,99 @@
-// Take a string of directions, and a number of deliveryPeople
-// And get back some information about the routes
+// Classes to help simulate delivery people delivering pizza
+//
+// Example usage:
+//
+//    import { DeliveryPerson, TakeTurnsDispatcher, LocationsVisitedReducer } = require('deliver.js')
+//    
+//    const deliveryPerson = new DeliveryPerson()
+//    const dispatcher = new TakeTurnsDispatcher([deliveryPerson])
+//    dispatcher.dispatch('^>v<')
+//    const locationsVisitedReducer = new LocationsVisitedReducer(deliveryPeople)
+//    console.dir(locationsVisitedReducer.summarize()) # => { locationsVisited: 4 }
 
-// throws if given an invalid direction
+// directions must be a string consisting of one of the directions in DIRECTIONS (^V<>)
 
-// delivered: number - number of unique homes with tasty pizza
-// houses: [..."[number, number]"] addresses of homes enjoying a nice meal (stringified)
-// locations: [...[number, number]] locations of each deliveryPerson
-// deliveryPeople: number - number of deliveryPeople
-const deliver = (directions, deliveryPeople = 1) => {
-  const houses = new Set([JSON.stringify([0, 0])])
-  const locations = Array.from(Array(deliveryPeople), () => [0, 0])
+// Valid movement directions
+const DIRECTIONS = Object.freeze({
+  '^': 'UP',
+  'v': 'DOWN',
+  '<': 'LEFT',
+  '>': 'RIGHT',
+})
 
-  directions.split('').forEach((direction, idx) => {
-    const index = idx % deliveryPeople
-    switch (direction) {
-      case '^': locations[index][1]++; break
-      case 'v': locations[index][1]--; break
-      case '>': locations[index][0]++; break
-      case '<': locations[index][0]--; break
-      default: throw new Error(`unknown direction ${direction}, please use one of ^v><`)
+// Represents a delivery person
+
+// Can be constructed with a starting location {x, y} which defaults to 0, 0
+class DeliveryPerson {
+  constructor(startingLocation = { x: 0, y: 0 }) {
+    this.locations = [startingLocation]
+  }
+  currentLocation() {
+    return this.locations[this.locations.length - 1]
+  }
+
+  // direction must be an array
+  deliver(directions) {
+    if (!Array.isArray(directions)) throw new Error(`directions should be an Array, found ${typeof directions}`)
+    while (directions.length) {
+      const nextDirection = directions.shift()
+      if (!(nextDirection in DIRECTIONS)) throw new Error(`unknown direction ${nextDirection}, please use one of ${Object.keys(DIRECTIONS)}`)
+
+      const direction = DIRECTIONS[nextDirection]
+
+      let location = { ... this.currentLocation() }
+
+      switch (direction) {
+        case 'UP': location.y++; break;
+        case 'DOWN': location.y--; break;
+        case 'LEFT': location.x--; break;
+        case 'RIGHT': location.x++; break;
+      }
+
+      this.locations.push(location)
     }
-    houses.add(JSON.stringify(locations[index]))
-  })
-  return { delivered: houses.size, houses, locations, deliveryPeople }
+  }
 }
 
-module.exports = { deliver }
+// This reducer returns the number of unique houses an array of DeliveryPeople have visisted
+class LocationsVisitedReducer {
+  // Take an array of DeliveryPerson
+  constructor(deliveryPeople) {
+    this.deliveryPeople = deliveryPeople
+  }
+  summarize() {
+    const locationsVisited = new Set()
+    this.deliveryPeople.forEach(({ locations }) => {
+      locations.forEach(({ x, y }) => {
+        locationsVisited.add(`${x},${y}`)
+      })
+    })
+    return { locationsVisited: locationsVisited.size }
+  }
+}
+
+/// A simple dispatcher that distributes the turns amongst all delivery people in order 
+class TakeTurnsDispatcher {
+  constructor(deliveryPeople = [new DeliveryPerson()]) {
+    this.deliveryPeople = deliveryPeople
+  }
+  dispatch(directions) {
+    this.deliveryPeople.forEach((deliveryPerson, index) => {
+      const isThisPersonsTurn = (_, directionIndex) => directionIndex % this.deliveryPeople.length === index
+      const splitDirections = directions.split('').filter(isThisPersonsTurn)
+      deliveryPerson.deliver(splitDirections)
+    })
+  }
+}
+
+// The deliver function is now deprecated, but lets keep it around for one push in case we missed a calling location that depends on it
+const deliver = (people, directions) => {
+  console.warn(`'deliver' is deprecated! Please use the DeliveryPerson, *Reducer, and *Dispatcher classes directly`)
+  const deliveryPeople = Array.from(Array(people), () => new DeliveryPerson())
+  const dispatcher = new TakeTurnsDispatcher(deliveryPeople)
+  dispatcher.dispatch(directions)
+  const locationsVisitedReducer = new LocationsVisitedReducer(deliveryPeople)
+  const { locationsVisited } = locationsVisitedReducer.summarize()
+  return { housesWithPizza: locationsVisited }
+}
+
+module.exports = { LocationsVisitedReducer, TakeTurnsDispatcher, DeliveryPerson, deliver }

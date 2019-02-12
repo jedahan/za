@@ -1,33 +1,37 @@
-const { deliver } = require('../src/deliver.js')
-const { strictEqual } = require(`assert`)
-const { test, run, exit } = require('spooning');
+const { LocationsVisitedReducer, TakeTurnsDispatcher, DeliveryPerson } = require('../src/deliver.js')
+const { deepStrictEqual } = require(`assert`)
+const { test } = require('spooning')
 
 const tests = [
-  {input: { people: 1, directions: '>'}, output: { delivered: 2}},
-  {input: { people: 1, directions: '^>v<'}, output: {delivered: 4}},
-  {input: { people: 1, directions: '^v^v^v^v^v'}, output: {delivered: 2}},
-  {input: { people: 2, directions: '>v'}, output: { delivered: 3}},
-  {input: { people: 2, directions: '^>v<'}, output: {delivered: 3}},
-  {input: { people: 2, directions: '^v^v^v^v^v'}, output: {delivered: 11}},
-  {input: { people: 1, directions: '^v^v^v^v^v'}, output: {delivered: 11}, fail: true},
+  { input: { people: 1, directions: '>' }, expectedOutput: { locationsVisited: 2 } },
+  { input: { people: 1, directions: '^>v<' }, expectedOutput: { locationsVisited: 4 } },
+  { input: { people: 1, directions: '^v^v^v^v^v' }, expectedOutput: { locationsVisited: 2 } },
+  { input: { people: 2, directions: '>v' }, expectedOutput: { locationsVisited: 3 } },
+  { input: { people: 2, directions: '^>v<' }, expectedOutput: { locationsVisited: 3 } },
+  { input: { people: 2, directions: '^v^v^v^v^v' }, expectedOutput: { locationsVisited: 11 } },
+  { input: { people: 1, directions: '^v^v^v^v^v' }, expectedOutput: { locationsVisited: 11 }, fail: true },
 ]
 
 for (let testCase of tests) {
   const { people, directions } = testCase.input
-  const { delivered: expectedDelivered } = testCase.output
+  const { expectedOutput } = testCase
 
   const description = testCase.fail
-    ? `not ${expectedDelivered} houses with ${people} people following '${directions}'`
-    : `${expectedDelivered} houses with ${people} people following '${directions}'`
+    ? `not ${expectedOutput.locationsVisited} houses with ${people} people following '${directions}'`
+    : `${expectedOutput.locationsVisited} houses with ${people} people following '${directions}'`
+
   test(description, cb => {
-    const { delivered } = deliver(directions, people)
+    const deliveryPeople = Array.from(Array(people), () => new DeliveryPerson())
+    const dispatcher = new TakeTurnsDispatcher(deliveryPeople)
+    dispatcher.dispatch(directions)
+    const locationsVisitedReducer = new LocationsVisitedReducer(deliveryPeople)
+    const output = locationsVisitedReducer.summarize()
+
     if (testCase.fail) {
-      try { strictEqual(delivered, expectedDelivered) }
-      catch (e) { cb(null) }
+      try { deepStrictEqual(output, expectedOutput) }
+      catch (e) { cb(e.code === 'ERR_ASSERTION' ? null : e) }
     } else {
-      cb(strictEqual(delivered, expectedDelivered))
+      cb(deepStrictEqual(output, expectedOutput))
     }
   })
 }
-
-run(exit)
